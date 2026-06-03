@@ -12,6 +12,7 @@ function createWindow() {
     }
   });
 
+  // Profil d'identification Chrome propre pour valider Google Auth
   const customUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
   
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
@@ -19,15 +20,11 @@ function createWindow() {
     callback({ cancel: false, requestHeaders: details.requestHeaders });
   });
 
-  const targetUrl = 'https://base44.com';
+  // VOTRE LIEN DE PRÉVISUALISATION EXACT EXCLUSIF
+  const targetUrl = 'https://app.base44.com/apps/6a16a0457fe004b13fc8f502/editor/preview';
 
-  win.webContents.on('did-navigate', (event, url) => {
-    if (url.includes('://base44.com') && !url.includes('editor') && !url.includes('login')) {
-      win.loadURL(targetUrl);
-    }
-  });
-
-  win.loadURL('https://://base44.com/login');
+  // Chargement direct du projet
+  win.loadURL(targetUrl);
   win.setMenu(null);
 }
 
