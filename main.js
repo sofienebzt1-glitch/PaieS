@@ -12,7 +12,7 @@ function createWindow() {
     }
   });
 
-  // Profil d'identification Chrome propre pour valider Google Auth
+  // User-Agent Chrome ultra-propre et sans aucune mention d'Electron
   const customUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
   
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
@@ -20,10 +20,21 @@ function createWindow() {
     callback({ cancel: false, requestHeaders: details.requestHeaders });
   });
 
-  // VOTRE LIEN DE PRÉVISUALISATION EXACT EXCLUSIF
-  const targetUrl = 'https://app.base44.com/apps/6a16a0457fe004b13fc8f502/editor/preview';
+  // LE SECRET : On force TOUTES les nouvelles fenêtres (comme le popup Google) à utiliser le même User-Agent masqué
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    return {
+      action: 'allow',
+      overrideBrowserWindowOptions: {
+        webPreferences: {
+          userAgent: customUserAgent,
+          contextIsolation: true,
+          nodeIntegration: false
+        }
+      }
+    };
+  });
 
-  // Chargement direct du projet
+  const targetUrl = 'https://app.base44.com/apps/6a16a0457fe004b13fc8f502/editor/preview';
   win.loadURL(targetUrl);
   win.setMenu(null);
 }
